@@ -1,0 +1,2 @@
+import{t as e}from"./rolldown-runtime.Dh6celcD.mjs";function t(e,t){return{favicon:`/assets/assets/jILjRIcnmMGIMmqO3mzMDBdYKZM.png`,robots:`max-image-preview:large`,socialImage:`/assets/assets/xxxC1H911WlGT3erDCiApQeXo.jpeg`,title:`Dhwani Shah`}}var n=e((()=>{}));export{t as n,n as t};
+//# sourceMappingURL=shared-lib.BOm5QDEw.mjs.map
