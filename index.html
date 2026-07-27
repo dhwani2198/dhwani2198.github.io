@@ -4,6 +4,34 @@
 <html lang="en" data-redirect-timezone="1">
 <head>
 	<meta charset="utf-8">
+	<script>
+		// Browsers suspend newly-created audio contexts until the first user gesture.
+		// Track Framer's contexts so the initial queued sound can start immediately
+		// after that gesture instead of waiting for a client-side navigation.
+		(() => {
+			const NativeAudioContext = window.AudioContext || window.webkitAudioContext
+			if (!NativeAudioContext) return
+
+			const contexts = new Set()
+			function TrackedAudioContext(...args) {
+				const context = new NativeAudioContext(...args)
+				contexts.add(context)
+				if (navigator.userActivation?.isActive) context.resume().catch(() => {})
+				return context
+			}
+			TrackedAudioContext.prototype = NativeAudioContext.prototype
+			Object.setPrototypeOf(TrackedAudioContext, NativeAudioContext)
+			window.AudioContext = TrackedAudioContext
+			if (window.webkitAudioContext) window.webkitAudioContext = TrackedAudioContext
+
+			const unlock = () => {
+				for (const context of contexts) context.resume().catch(() => {})
+			}
+			for (const event of ["pointerdown", "touchend", "keydown"]) {
+				window.addEventListener(event, unlock, { capture: true, passive: true })
+			}
+		})()
+	</script>
 	<meta name="viewport" content="width=device-width">
 	<meta name="generator" content="Framer bee8ea6">
 	<title>Dhwani Shah</title>
